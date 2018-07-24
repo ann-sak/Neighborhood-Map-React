@@ -38,7 +38,7 @@
   padding: 0.5em;
   width:100%;
   font-size:1.5em;
-  color: red;
+  color: black;
 }
 
 .map {
@@ -56,7 +56,8 @@
   width: 100%;
   margin-right:0;
   background-color: yellow;
-  height: 15vh;
+  height: 24vh;
+  font-size:1em;
 }
 
 .text-input input {
@@ -76,14 +77,17 @@
 
 .text-input ul {
   list-style-type: none;
-  padding-left: 0;
+  padding-left: 5em;
+  padding-right:850px;
 }
 
 .text-input li {
   text-decoration: none;
-  border-bottom: 2px solid white;
+  border-top: 1px solid white;
   color: white;
-  line-height: 2cm;
+  line-height: 1cm;
+  color: black;
+
 }
 
 .menu {
