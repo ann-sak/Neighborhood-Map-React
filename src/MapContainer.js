@@ -2,6 +2,20 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
 class MapContainer extends Component {
+  state = {
+    locations: [
+      {name: "Kino Nawojka", location: {lat: 52.8430759, lng: 19.1773195}},
+      {name: "Nowe Centrum Lipna", location: {lat: 52.846243, lng: 19.178159}},
+      {name: "Park Miejski", location: {lat: 52.8403201, lng: 19.1817102}},
+      {name: "Urząd Miejski", location: {lat: 52.8456906, lng: 19.1804845}},
+      {name: "Liceum Ogólnokształcące", location: {lat: 52.8505664, lng: 19.1788644}},
+
+    ],
+    query: '',
+    markers: [],
+    infowindow: new this.props.google.maps.InfoWindow()
+  }
+
   componentDidMount() {
     this.loadMap()
   }
@@ -16,14 +30,49 @@ class MapContainer extends Component {
 
       const mapConfig = Object.assign({}, {
         center: {lat: 52.845863, lng: 19.181319},
-        zoom: 15,
+        zoom: 13,
         mapTypeId: 'roadmap'
       })
 
       this.map = new maps.Map(node, mapConfig)
+      this.addMarkers()
     }
   }
 
+  addMarkers = () => {
+    const {google} = this.props
+    let {infowindow} = this.state
+    const bounds = new google.maps.LatLngBounds();
+
+    this.state.locations.forEach( (location, ind) => {
+      const marker = new google.maps.Marker({
+        position: {lat: location.location.lat, lng: location.location.lng},
+        map: this.map,
+        title: location.name,
+        animation: google.maps.Animation.DROP,
+      });
+
+      marker.addListener('click', () => {
+        this.populateInfoWindow(marker, infowindow)
+      })
+      this.setState((state) => ({
+      markers: [...state.markers, marker]
+      }))
+      bounds.extend(marker.position)
+    })
+    this.map.fitBounds(bounds)
+  }
+
+  populateInfoWindow = (marker, infowindow) => {
+    if (infowindow.marker !== marker) {
+      infowindow.marker = marker;
+      infowindow.setContent(`<h3>` + marker.title + `</h3><h4<user likes it</h4>`);
+      infowindow.open(this.map, marker);
+      infowindow.addListener('closeclick', () => {
+        infowindow.marker = null;
+      });
+    }
+  }
 
   render() {
     return(
