@@ -66,7 +66,8 @@ class MapContainer extends Component {
   populateInfoWindow = (marker, infowindow) => {
     if (infowindow.marker !== marker) {
       infowindow.marker = marker;
-      infowindow.setContent(`<h3>` + marker.title + `</h3><h4<user likes it</h4>`);
+      infowindow.setContent(`<h3>` + marker.title + `</h3>
+        <br><h4>user likes it</h4>`);
       infowindow.open(this.map, marker);
       infowindow.addListener('closeclick', () => {
         infowindow.marker = null;

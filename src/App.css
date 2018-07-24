@@ -33,17 +33,18 @@
 
 .heading {
   margin: 0;
-  text-align: left;
+  text-align: center;
   background-color: yellow;
-  padding: 1em;
-  width:16%;
+  padding: 0.5em;
+  width:100%;
   font-size:1.5em;
+  color: red;
 }
 
 .map {
   margin: 0;
-  width: 80%;
-  height: 80vh;
+  width: 100%;
+  height: 60vh;
 }
 
 .container {
@@ -52,9 +53,10 @@
 }
 
 .text-input {
-  width: 19%;
-  background-color: white;
-  height: 100%;
+  width: 100%;
+  margin-right:0;
+  background-color: yellow;
+  height: 15vh;
 }
 
 .text-input input {
