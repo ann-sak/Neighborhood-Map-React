@@ -99,10 +99,16 @@ class MapContainer extends Component {
       <div>
         <div className="container">
           <div className="text-input">
+
             <ul className="list"> {
               markers.map((m,i) =>(<li key = {i} className="link">{m.title}</li>))
             }
             </ul>
+            <input role="search" className="search"
+              type="text"
+              value={this.state.value}
+              onChange={this.handleChange}
+            />
           </div>
 
           <div role="application" className="map" ref="map">
