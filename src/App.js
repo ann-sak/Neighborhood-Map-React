@@ -12,7 +12,7 @@ class App extends Component {
             <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"/>
           </svg>
         </a>
-        <h1 className="heading"> Google Maps api </h1>
+        <h1 className="heading"> Neighborhood Map (React) </h1>
         <MapContainer google={this.props.google} />
       </div>
     );

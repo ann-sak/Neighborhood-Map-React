@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 class MapContainer extends Component {
   state = {
     locations: [
+      //Add default locations
       {name: "Kino Nawojka", location: {lat: 52.8430759, lng: 19.1773195}},
       {name: "Nowe Centrum Lipna", location: {lat: 52.846243, lng: 19.178159}},
       {name: "Park Miejski", location: {lat: 52.8403201, lng: 19.1817102}},
@@ -13,12 +14,15 @@ class MapContainer extends Component {
     ],
     query: '',
     markers: [],
-    infowindow: new this.props.google.maps.InfoWindow()
+    infowindow: new this.props.google.maps.InfoWindow(),
+    checkedMarker:null
   }
 
   componentDidMount() {
     this.loadMap()
     this.clickList()
+    //Change marker color when it is clicked
+    this.setState({checkedMarker: this.makeMarkerIcon('ffffff')})
   }
 
   loadMap() {
@@ -37,6 +41,8 @@ class MapContainer extends Component {
 
       this.map = new maps.Map(node, mapConfig)
       this.addMarkers()
+    } else {
+      window.alert("There is a problem with map loading")
     }
   }
 
@@ -57,18 +63,22 @@ class MapContainer extends Component {
     })
   }
 
+  handleChange = (event) => {
+    this.setState({query: event.target.value})
+  }
+
   addMarkers = () => {
     const {google} = this.props
     let {infowindow} = this.state
-    const bounds = new google.maps.LatLngBounds();
+    const bounds = new google.maps.LatLngBounds()
 
-    this.state.locations.forEach( (location, ind) => {
+    this.state.locations.forEach((location, ind) => {
       const marker = new google.maps.Marker({
         position: {lat: location.location.lat, lng: location.location.lng},
         map: this.map,
         title: location.name,
         animation: google.maps.Animation.DROP,
-      });
+      })
 
       marker.addListener('click', () => {
         this.populateInfoWindow(marker, infowindow)
@@ -82,26 +92,65 @@ class MapContainer extends Component {
   }
 
   populateInfoWindow = (marker, infowindow) => {
+    const defaultMarker = marker.getIcon()
+    const {checkedMarker, markers} = this.state
+
     if (infowindow.marker !== marker) {
-      infowindow.marker = marker;
-      infowindow.setContent(`<h3>` + marker.title + `</h3>
-        <br><h4>user likes it</h4>`);
-      infowindow.open(this.map, marker);
-      infowindow.addListener('closeclick', () => {
-        infowindow.marker = null;
-      });
+      if (infowindow.marker) {
+        const index = markers.findIndex(m => m.title === infowindow.marker.title)
+        markers[index].setIcon(defaultMarker)
+      }
+      marker.setIcon(checkedMarker)
+      infowindow.marker = marker
+
+      infowindow.setContent(`<h3>${marker.title}</h3>
+        <br><h4>user likes it</h4>`)
+      infowindow.open(this.map, marker)
+
+      infowindow.addListener('closeclick', function () {
+        infowindow.marker = marker.setIcon()
+      })
     }
   }
 
+  makeMarkerIcon = (markerColor) => {
+    const {google} = this.props
+    let markerImage = new google.maps.MarkerImage(
+      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor +'|40|_|%E2%80%A2',
+    )
+    return markerImage;
+  }
+
   render() {
-    const {markers} = this.state
+    const {markers, query, locations, infowindow} = this.state
+
+    if (query) {
+      locations.forEach((location, index) => {
+        if(location.name.toLowerCase().includes(query.toLowerCase())) {
+          markers[index].setVisible(true)
+        } else {
+          if (infowindow.marker === markers[index]) {
+            infowindow.close()
+          }
+          markers[index].setVisible(false)
+        }
+      })
+    } else {
+      locations.forEach((location, index) => {
+        if (markers.length && markers[index]) {
+          markers[index].setVisible(true)
+        }
+      })
+    }
+
+
     return(
       <div>
         <div className="container">
           <div className="text-input">
 
             <ul className="list"> {
-              markers.map((m,i) =>(<li key = {i} className="link">{m.title}</li>))
+              markers.filter(m => m.getVisible()).map((m,i) =>(<li key = {i} className="link">{m.title}</li>))
             }
             </ul>
             <input role="search" className="search"
