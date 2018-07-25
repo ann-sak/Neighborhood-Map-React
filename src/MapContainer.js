@@ -18,6 +18,7 @@ class MapContainer extends Component {
 
   componentDidMount() {
     this.loadMap()
+    this.clickList()
   }
 
   loadMap() {
@@ -37,6 +38,23 @@ class MapContainer extends Component {
       this.map = new maps.Map(node, mapConfig)
       this.addMarkers()
     }
+  }
+
+  clickList = () => {
+    const clickedItem = this
+    const {infowindow} = this.state
+    const displayInfowindow = (event) => {
+    const markerIndex = this.state.markers.findIndex(m => m.title.toLowerCase() === event.target.innerText.toLowerCase())
+
+    clickedItem.populateInfoWindow(this.state.markers[markerIndex], infowindow)
+    }
+
+    const list = document.querySelector('.list')
+    list.addEventListener('click', function (event) {
+      if(event.target && event.target.nodeName === "LI") {
+        displayInfowindow(event)
+      }
+    })
   }
 
   addMarkers = () => {
@@ -81,8 +99,8 @@ class MapContainer extends Component {
       <div>
         <div className="container">
           <div className="text-input">
-            <ul className="location"> {
-              markers.map((m,i) =>(<li key = {i}>{m.title}</li>))
+            <ul className="list"> {
+              markers.map((m,i) =>(<li key = {i} className="link">{m.title}</li>))
             }
             </ul>
           </div>

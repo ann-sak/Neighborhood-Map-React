@@ -90,6 +90,10 @@
 
 }
 
+.link {
+  cursor: pointer;
+}
+
 .menu {
   display: none;
 }
