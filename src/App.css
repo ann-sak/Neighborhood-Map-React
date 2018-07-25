@@ -34,11 +34,13 @@
 .heading {
   margin: 0;
   text-align: center;
-  background-color: yellow;
-  padding: 0.5em;
+  background-color: #fff2af;
+  xpadding: 0.5em;
   width:100%;
   font-size:1.5em;
-  color: black;
+  color: #ea4335;
+  border-bottom: 2px solid #f6cf65;
+  border-top: 3px solid #f6cf65;
 }
 
 .map {
@@ -55,7 +57,7 @@
 .text-input {
   width: 100%;
   margin-right:0;
-  background-color: yellow;
+  background-color: #ededed;
   height: 24vh;
   font-size:1em;
 }
@@ -77,16 +79,20 @@
 
 .text-input ul {
   list-style-type: none;
-  padding-left: 5em;
+  xpadding-left: 5em;
   padding-right:850px;
+  margin:0;
 }
 
 .text-input li {
+  padding-left:1em;
   text-decoration: none;
-  border-top: 1px solid white;
+  xborder-top: 1px solid white;
+  border-bottom: 2px solid white;
   color: white;
   line-height: 1cm;
   color: black;
+  background-color: #c0ecae;
 
 }
 

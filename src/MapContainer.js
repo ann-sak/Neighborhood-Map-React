@@ -43,10 +43,10 @@ class MapContainer extends Component {
   clickList = () => {
     const clickedItem = this
     const {infowindow} = this.state
-    const displayInfowindow = (event) => {
-    const markerIndex = this.state.markers.findIndex(m => m.title.toLowerCase() === event.target.innerText.toLowerCase())
 
-    clickedItem.populateInfoWindow(this.state.markers[markerIndex], infowindow)
+    const displayInfowindow = (event) => {
+      const markerIndex = this.state.markers.findIndex(m => m.title.toLowerCase() === event.target.innerText.toLowerCase())
+      clickedItem.populateInfoWindow(this.state.markers[markerIndex], infowindow)
     }
 
     const list = document.querySelector('.list')
