@@ -5,17 +5,21 @@ class MapContainer extends Component {
   state = {
     locations: [
       //Add default locations
-      {name: "Kino Nawojka", location: {lat: 52.8430759, lng: 19.1773195}},
-      {name: "Nowe Centrum Lipna", location: {lat: 52.846243, lng: 19.178159}},
-      {name: "Park Miejski", location: {lat: 52.8403201, lng: 19.1817102}},
-      {name: "Urząd Miejski", location: {lat: 52.8456906, lng: 19.1804845}},
-      {name: "Liceum Ogólnokształcące", location: {lat: 52.8505664, lng: 19.1788644}},
+      {name: "Kino Nawojka", location: {lat: 52.8446729, lng: 19.1796138}},
+      {name: "Nowe Centrum Lipna", location: {lat: 52.8446632, lng: 19.1770389}},
+      {name: "Park Miejski", location: {lat: 52.8412546, lng: 19.1808583}},
+      {name: "Urząd Miejski", location: {lat: 52.8453857, lng: 19.1834118}},
+      {name: "Liceum Ogólnokształcące", location: {lat:52.8513319, lng:19.1798322}},
 
     ],
     query: '',
     markers: [],
     infowindow: new this.props.google.maps.InfoWindow(),
-    checkedMarker:null
+    checkedMarker:null,
+    street: '',
+	  city: '',
+	  phone: ''
+
   }
 
   componentDidMount() {
@@ -23,6 +27,7 @@ class MapContainer extends Component {
     this.clickList()
     //Change marker color when it is clicked
     this.setState({checkedMarker: this.makeMarkerIcon('ffffff')})
+
   }
 
   loadMap() {
@@ -93,18 +98,44 @@ class MapContainer extends Component {
 
   populateInfoWindow = (marker, infowindow) => {
     const defaultMarker = marker.getIcon()
-    const {checkedMarker, markers} = this.state
+    const {checkedMarker, markers,
+      //street, city, phone
+    } = this.state
+    //const self = this
 
     if (infowindow.marker !== marker) {
       if (infowindow.marker) {
         const index = markers.findIndex(m => m.title === infowindow.marker.title)
         markers[index].setIcon(defaultMarker)
+        // Foursquare API Client
+        const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
+        const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
+        const $ = require ('jquery')
+        // get JSON request of foursquare data
+        let reqURL = `https://api.foursquare.com/v2/venues/search?ll=${marker.position.lat},${marker.position.lng}&client_id=${clientID}&client_secret=${clientSecret}&v=20180726&query=${this.title}`;
+
+        $.getJSON(reqURL).done(function(data) {
+        var results = data.response.venues[0];
+          this.setState((state) => ({street: results.location.formattedAddress[0]}));
+          this.setState((state) => ({city: results.location.formattedAddress[1]}));
+          this.setState((state) => ({phone: results.contact.formattedPhone}));
+        }).fail(function() {
+          alert('Something went wrong with foursquare');
+
+        });
+
       }
       marker.setIcon(checkedMarker)
       infowindow.marker = marker
 
+
+
       infowindow.setContent(`<h3>${marker.title}</h3>
-        <br><h4>user likes it</h4>`)
+        <br> <div class="content">` + this.state.street + `</div>` +
+        `<div class="content">` + this.state.city + `</div>` +
+        `<div class="content">` + this.state.phone + `</div>`)
+        console.log(this.state.street);
+        console.log(this.state.city);
       infowindow.open(this.map, marker)
 
       infowindow.addListener('closeclick', function () {
