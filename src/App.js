@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { GoogleApiWrapper } from 'google-maps-react'
 import './App.css';
 import MapContainer from './MapContainer.js'
+import InfoWindow from './Infowindow.js'
 
 
 
@@ -16,6 +17,7 @@ class App extends Component {
         </a>
         <h1 className="heading"> Neighborhood Map (React) </h1>
         <MapContainer google={this.props.google} />
+        <InfoWindow />
       </div>
     );
   }

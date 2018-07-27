@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-
-let foursquare = require('react-foursquare')({
-  clientID: 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT',
-  clientSecret: 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX'
-})
-
+import InfoWindow from './Infowindow.js'
 
 
 class MapContainer extends Component {
@@ -37,14 +32,7 @@ class MapContainer extends Component {
     //Change marker color when it is clicked
     this.setState({checkedMarker: this.makeMarkerIcon('ffffff')})
 
-    foursquare.venues.getVenues()
-    .then(res => {
 
-      this.setState({street: res.response.venues});
-     this.setState({city: res.response.venues});
-     this.setState({phone: res.response.venues})
-
-  })
 
   }
 
@@ -116,30 +104,14 @@ class MapContainer extends Component {
 
   populateInfoWindow = (marker, infowindow) => {
     const defaultMarker = marker.getIcon()
-    const {checkedMarker, markers,
-      street, city, phone
-      } = this.state
+    const {checkedMarker, markers} = this.state
     //const self = this
 
     if (infowindow.marker !== marker) {
       if (infowindow.marker) {
         const index = markers.findIndex(m => m.title === infowindow.marker.title)
         markers[index].setIcon(defaultMarker)
-                // Foursquare API Client
-                const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
-                const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
-                //const $ = require ('jquery')
-                // get JSON request of foursquare data
-                let reqURL = `https://api.foursquare.com/v2/venues/search?ll=${marker.position.lat},${marker.position.lng}&client_id=${clientID}&client_secret=${clientSecret}&v=20180726&query=${this.title}`;
 
-                foursquare.venues.getVenues()
-                .then(res => {
-                  const {infowindow, marker} = this.state
-                  this.setState({street: res.response.venues});
-                  this.setState({city: res.response.venues});
-                  this.setState({phone: res.response.venues})
-
-                }).catch(alert('Something went wrong with foursquare'));
 
       }
       marker.setIcon(checkedMarker)
@@ -147,13 +119,12 @@ class MapContainer extends Component {
 
 
 
-      infowindow.setContent(`<h3>${marker.title}</h3>
-        <br> <div class="content">` + street + `</div>` +
-        `<div class="content">` + this.state.city + `</div>` +
-        `<div class="content">` + this.state.phone + `</div>`)
-        console.log(street);
-        console.log(this.state.city);
+      infowindow.setContent(
+        `<div><h3>${marker.title}</h3>` +
+        `<br><button className="details-button" >Details</button></div>`)
       infowindow.open(this.map, marker)
+      //const button = document.querySelector('.details-button')
+          //  button.addListener('click', function () {})
 
       infowindow.addListener('closeclick', function () {
         infowindow.marker = marker.setIcon()
@@ -212,7 +183,7 @@ class MapContainer extends Component {
           </div>
 
           <div role="application" className="map" ref="map">
-            loading map...
+            <InfoWindow />
           </div>
         </div>
       </div>
