@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
+let foursquare = require('react-foursquare')({
+  clientID: 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT',
+  clientSecret: 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX'
+})
+
+
+
 class MapContainer extends Component {
   state = {
     locations: [
@@ -22,11 +29,22 @@ class MapContainer extends Component {
 
   }
 
+
+
   componentDidMount() {
     this.loadMap()
     this.clickList()
     //Change marker color when it is clicked
     this.setState({checkedMarker: this.makeMarkerIcon('ffffff')})
+
+    foursquare.venues.getVenues()
+    .then(res => {
+
+      this.setState({street: res.response.venues});
+     this.setState({city: res.response.venues});
+     this.setState({phone: res.response.venues})
+
+  })
 
   }
 
@@ -99,30 +117,29 @@ class MapContainer extends Component {
   populateInfoWindow = (marker, infowindow) => {
     const defaultMarker = marker.getIcon()
     const {checkedMarker, markers,
-      //street, city, phone
-    } = this.state
+      street, city, phone
+      } = this.state
     //const self = this
 
     if (infowindow.marker !== marker) {
       if (infowindow.marker) {
         const index = markers.findIndex(m => m.title === infowindow.marker.title)
         markers[index].setIcon(defaultMarker)
-        // Foursquare API Client
-        const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
-        const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
-        const $ = require ('jquery')
-        // get JSON request of foursquare data
-        let reqURL = `https://api.foursquare.com/v2/venues/search?ll=${marker.position.lat},${marker.position.lng}&client_id=${clientID}&client_secret=${clientSecret}&v=20180726&query=${this.title}`;
+                // Foursquare API Client
+                const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
+                const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
+                //const $ = require ('jquery')
+                // get JSON request of foursquare data
+                let reqURL = `https://api.foursquare.com/v2/venues/search?ll=${marker.position.lat},${marker.position.lng}&client_id=${clientID}&client_secret=${clientSecret}&v=20180726&query=${this.title}`;
 
-        $.getJSON(reqURL).done(function(data) {
-        var results = data.response.venues[0];
-          this.setState((state) => ({street: results.location.formattedAddress[0]}));
-          this.setState((state) => ({city: results.location.formattedAddress[1]}));
-          this.setState((state) => ({phone: results.contact.formattedPhone}));
-        }).fail(function() {
-          alert('Something went wrong with foursquare');
+                foursquare.venues.getVenues()
+                .then(res => {
+                  const {infowindow, marker} = this.state
+                  this.setState({street: res.response.venues});
+                  this.setState({city: res.response.venues});
+                  this.setState({phone: res.response.venues})
 
-        });
+                }).catch(alert('Something went wrong with foursquare'));
 
       }
       marker.setIcon(checkedMarker)
@@ -131,10 +148,10 @@ class MapContainer extends Component {
 
 
       infowindow.setContent(`<h3>${marker.title}</h3>
-        <br> <div class="content">` + this.state.street + `</div>` +
+        <br> <div class="content">` + street + `</div>` +
         `<div class="content">` + this.state.city + `</div>` +
         `<div class="content">` + this.state.phone + `</div>`)
-        console.log(this.state.street);
+        console.log(street);
         console.log(this.state.city);
       infowindow.open(this.map, marker)
 
@@ -181,9 +198,12 @@ class MapContainer extends Component {
           <div className="text-input">
 
             <ul className="list"> {
-              markers.filter(m => m.getVisible()).map((m,i) =>(<li key = {i} className="link">{m.title}</li>))
+              markers.filter(m => m.getVisible()).map((m,i) =>(
+                <li key = {i} className="link">{m.title}</li>
+                ))
             }
             </ul>
+
             <input role="search" className="search"
               type="text"
               value={this.state.value}
