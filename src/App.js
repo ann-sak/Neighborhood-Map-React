@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { GoogleApiWrapper } from 'google-maps-react'
 import './App.css';
+import Foursquare from 'react-foursquare'
+
 import MapContainer from './MapContainer.js'
 import InfoWindow from './Infowindow.js'
 
