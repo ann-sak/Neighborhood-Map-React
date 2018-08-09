@@ -70,21 +70,14 @@ class App extends Component {
       findLocations = locations
     }
 
-    let menu;
-    if (this.state.listOpen) {
-      menu = <Header
-        query = {this.state.query}
-        updateQuery = {this.updateQuery}
-        locations={findLocations}
-        selectLocations={this.selectLocations}
-        />
-    }
+    
     return (
       <div>
           <Header
             locations={locations}
             selectLocations={this.selectLocations}
             updateQuery={this.updateQuery}
+            locations={findLocations}
           />
           <MapContainer
             markers={markers}
