@@ -36,11 +36,19 @@ class MapContainer extends React.Component {
                     }
                     key={location.name}
                     id={location.id}
+                    name={location.name}
                     position={
                       {lat: location.position.lat,
                       lng: location.position.lng}
                     } />
                 ))
+              }
+              {
+                <InfoWindow
+                  marker={checkedMarker}
+                  visible={infowindow}>
+                  <h1>{location.name}</h1>
+                </InfoWindow>
               }
         </Map>
       </div>

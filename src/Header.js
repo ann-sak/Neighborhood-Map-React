@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 
+import './App.css';
+
+import LocationsList from './LocationsList.js';
+import Search from './Search.js';
+
 
 class Header extends Component {
   render () {
