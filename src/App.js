@@ -1,30 +1,103 @@
 import React, { Component } from 'react'
-import { GoogleApiWrapper } from 'google-maps-react'
+import ReactDOM from 'react-dom'
+
 import './App.css';
-import Foursquare from 'react-foursquare'
+import escapeRegExp from 'escape-string-regexp';
 
 import MapContainer from './MapContainer.js'
-import InfoWindow from './Infowindow.js'
+import Header from './Header.js'
+import Hamburger from './Hamburger.js';
 
 
 
 class App extends Component {
+  constructor (props) {
+    super (props)
+    this.state = {
+      locations: require ('./data/locations.json'),
+      query: '',
+      markers: [],
+      location: {},
+      infowindow: false,
+      checkedMarker:{},
+      data:[],
+      listOpen: true
+    }
+  }
+
+  componentDidMount() {
+
+  }
+
+  updateQuery = (query) => {
+    this.setState({query: query.trim() })
+  }
+
+  markersArray = (marker) => {
+    if (marker !== null) {
+      this.state.markers.push(marker)
+    }
+  }
+
+  onMarkerClick = (props, marker, e) =>
+  this.setState({
+    location: props,
+    checkedMarker: marker,
+    infowindow: true
+  })
+
+  selectLocations = (location) => {
+    for (const newMarker of this.markers) {
+      if (newMarker.props.name === location.name) {
+        newMarker.props.google.maps.event.trigger(newMarker.marker, 'click')
+      }
+    }
+  }
+
+  toggleList = () => {
+    this.setState((prevState) => {
+      return {listOpen: !prevState.listOpen}
+    })
+  }
+
   render() {
+    const {locations, infowindow, checkedMarker, location, data, markers} = this.state
+
+    let findLocations
+    if (this.state.query) {
+      const match = new RegExp(escapeRegExp(this.state.qury), 'i')
+      findLocations = locations.filter((location) => match.test(location.name))
+    } else {
+      findLocations = locations
+    }
+
+    let menu;
+    if (this.state.listOpen) {
+      menu = <Header
+        query = {this.state.query}
+        updateQuery = {this.updateQuery}
+        locations={findLocations}
+        selectLocations={this.selectLocations}
+        />
+    }
     return (
       <div>
-        <a className="menu" tabIndex="0">
-          <svg className="hamburger-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 23">
-            <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"/>
-          </svg>
-        </a>
-        <h1 className="heading"> Neighborhood Map (React) </h1>
-        <MapContainer google={this.props.google} />
-        <InfoWindow />
+          <Header/>
+          <MapContainer
+            markers={markers}
+            locations = {findLocations}
+            infowindow = {infowindow}
+            checkedMarker={checkedMarker}
+            location={location}
+            data={data}
+            onMarkerClick={this.onMarkerClick}
+            markersArray={this.markersArray}
+         />
       </div>
     );
   }
 }
 
-export default GoogleApiWrapper({
-  apiKey: 'AIzaSyATLu0j9Yd3EsjqYrQiXCCfTe1HNHPBE_I'
-})(App)
+
+
+export default App
