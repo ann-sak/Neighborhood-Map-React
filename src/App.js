@@ -64,7 +64,7 @@ class App extends Component {
 
     let findLocations
     if (this.state.query) {
-      const match = new RegExp(escapeRegExp(this.state.qury), 'i')
+      const match = new RegExp(escapeRegExp(this.state.query), 'i')
       findLocations = locations.filter((location) => match.test(location.name))
     } else {
       findLocations = locations
@@ -84,6 +84,7 @@ class App extends Component {
           <Header
             locations={locations}
             selectLocations={this.selectLocations}
+            updateQuery={this.updateQuery}
           />
           <MapContainer
             markers={markers}

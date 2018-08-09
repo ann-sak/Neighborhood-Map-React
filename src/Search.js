@@ -1,13 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
+import './App.css';
 
-class Search extends Component {
+function Search (props) {
 
-render() {
+
   return (
     <div>
-      <h1>test2</h1>
+      <input
+        type="text"
+        placeholder="Search for a location"
+        value = {props.query}
+        onChange = {(event) => props.updateQuery(event.target.value)}
+      />
     </div>
     );
 }
-}
+
 export default Search;
