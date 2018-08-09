@@ -11,14 +11,16 @@ class Header extends Component {
 render() {
   return (
     <div>
-      <h1>Neighboorhood Map</h1>
+      
       <Search
         query={this.props.query}
         updateQuery={this.props.updateQuery}
+        findLocations={this.props.findLocations}
       />
       <LocationsList
         locations={this.props.locations}
         selectLocations={this.props.selectLocations}
+        findLocations={this.props.findLocations}
         />
     </div>
     );

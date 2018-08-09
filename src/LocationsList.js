@@ -7,7 +7,7 @@ function LocationsList (props) {
   return (
     <div>
       <ul>
-        {props.locations.map((location) => (
+        {props.findLocations.map((location) => (
           <li
             key = {location.id}
             onClick = {() => props.selectLocations(location)}
