@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 
 import './App.css';
 import escapeRegExp from 'escape-string-regexp';
@@ -47,7 +46,7 @@ class App extends Component {
   })
 
   selectLocations = (location) => {
-    for (const newMarker of this.markers) {
+    for (const newMarker of this.state.markers) {
       if (newMarker.props.name === location.name) {
         newMarker.props.google.maps.event.trigger(newMarker.marker, 'click')
       }
@@ -82,7 +81,10 @@ class App extends Component {
     }
     return (
       <div>
-          <Header/>
+          <Header
+            locations={locations}
+            selectLocations={this.selectLocations}
+          />
           <MapContainer
             markers={markers}
             locations = {findLocations}

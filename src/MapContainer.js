@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { GoogleApiWrapper, InfoWindow, Marker, Map} from 'google-maps-react'
 import './App.css';
 
@@ -12,7 +12,9 @@ let foursquare = require('react-foursquare')({
 
 class MapContainer extends React.Component {
   render() {
-    const {locations, onMarkerClick, infowindow, checkedMarker, location, data, google, markers} = this.props
+    const {locations, onMarkerClick, infowindow, checkedMarker, location
+      //, data, google, markers
+    } = this.props
 
 
 

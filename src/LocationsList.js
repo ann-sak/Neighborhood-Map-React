@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
+import './App.css';
+
+function LocationsList (props) {
 
 
-class LocationsList extends Component {
-
-render() {
   return (
     <div>
-      <h1>test</h1>
+      <ul>
+        {props.locations.map((location) => (
+          <li
+            key = {location.id}
+            onClick = {() => props.selectLocations(location)}
+          >
+          {location.name}
+          </li>
+
+        ))}
+      </ul>
     </div>
     );
 }
-}
+
 export default LocationsList;
