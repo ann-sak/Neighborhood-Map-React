@@ -7,13 +7,20 @@ import Search from './Search.js';
 
 
 class Header extends Component {
-  render () {
-    return (
-      <header >
-        <h2 className="slogan">Neighboor Map</h2>
-      </header>
-    );
-  }
-}
 
+render() {
+  return (
+    <div>
+      <Search
+        query={this.props.query}
+        updateQuery={this.props.updateQuery}
+      />
+      <LocationsList
+        locations={this.props.locations}
+        selectLocations={this.props.selectLocations}
+        />
+    </div>
+    );
+}
+}
 export default Header;
