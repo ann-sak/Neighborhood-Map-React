@@ -3,18 +3,11 @@ import { GoogleApiWrapper, InfoWindow, Marker, Map} from 'google-maps-react'
 import './App.css';
 
 
-let foursquare = require('react-foursquare')({
-  clientID: 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT',
-  clientSecret: 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX'
-})
-
 
 
 class MapContainer extends React.Component {
   render() {
-    const {locations, onMarkerClick, infowindow, checkedMarker, location
-      //, data, google, markers
-    } = this.props
+    const {locations, onMarkerClick, infowindow, checkedMarker, location,foursquare,street} = this.props
 
 
 
@@ -50,6 +43,7 @@ class MapContainer extends React.Component {
                   marker={checkedMarker}
                   visible={infowindow}>
                   <h1>{location.name}</h1>
+                  <p>{street}</p>
                 </InfoWindow>
               }
         </Map>

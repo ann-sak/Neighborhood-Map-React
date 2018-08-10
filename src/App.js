@@ -20,12 +20,16 @@ class App extends Component {
       infowindow: false,
       checkedMarker:{},
       data:[],
-      listOpen: true
+      listOpen: true,
+      street:'',
+      city:'',
+      country:''
+
     }
   }
 
   componentDidMount() {
-
+    this.getFoursquareInfo();
   }
 
   updateQuery = (query) => {
@@ -59,6 +63,33 @@ class App extends Component {
     })
   }
 
+
+  getFoursquareInfo = () => {
+    const {locations} = this.state
+    // Foursquare API Client
+
+      const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
+      const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
+
+      const $ = require('jquery');
+
+      /*his.state.locations.map((location) => {
+        return fetch (`https://api.foursquare.com/v2/venues/search?ll=${location.position.lat},${location.position.lng}&client_id=${clientID}&client_secret=${clientSecret}&v=20180726`)
+      })*/
+      // get JSON request of foursquare data
+      //let reqURL = baseURL + locations.lat + ',' + locations.lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&v=20180726'
+      let reqURL = `https://api.foursquare.com/v2/venues/search?ll=` + locations.position.lat + `,` + this.locations.position.lng `&client_id=` + clientID + `&client_secret=` + clientSecret + `&v=20180726`;
+       $.getJSON(reqURL).done(function(data) {
+         var results = data.response.venues[0];
+          this.setState({street: results.location.formattedAddress[0]});
+          this.setState((state) => ({city: results.location.formattedAddress[1]}));
+          this.setState((state) => ({country: results.location.formattedAddress[2]}));
+      }).fail(function() {
+        alert('Something went wrong with foursquare');
+        console.log(reqURL)
+       });
+  }
+
   render() {
     const {locations, infowindow, checkedMarker, location, data, markers} = this.state
 
@@ -83,7 +114,7 @@ class App extends Component {
 
     return (
       <div>
-          <h1>Neighboorhood Map </h1> 
+          <h1>Neighboorhood Map </h1>
           <Hamburger
             toggleList={this.toggleList}
           />
@@ -92,11 +123,13 @@ class App extends Component {
             markers={markers}
             locations = {findLocations}
             infowindow = {infowindow}
+            foursquare = {this.getFoursquareInfo}
             checkedMarker={checkedMarker}
             location={location}
             data={data}
             onMarkerClick={this.onMarkerClick}
             markersArray={this.markersArray}
+
          />
       </div>
     );
