@@ -7,7 +7,7 @@ import './App.css';
 
 class MapContainer extends React.Component {
   render() {
-    const {locations, onMarkerClick, infowindow, checkedMarker, location,foursquare,street} = this.props
+    const {locations, onMarkerClick, infowindow, checkedMarker, location,data} = this.props
 
 
 
@@ -33,8 +33,8 @@ class MapContainer extends React.Component {
                     id={location.id}
                     name={location.name}
                     position={
-                      {lat: location.position.lat,
-                      lng: location.position.lng}
+                      {lat: location.location.lat,
+                      lng: location.location.lng}
                     } />
                 ))
               }
@@ -43,7 +43,7 @@ class MapContainer extends React.Component {
                   marker={checkedMarker}
                   visible={infowindow}>
                   <h1>{location.name}</h1>
-                  <p>{street}</p>
+                  <p></p>
                 </InfoWindow>
               }
         </Map>

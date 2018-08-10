@@ -7,24 +7,30 @@ import MapContainer from './MapContainer.js'
 import Header from './Header.js'
 import Hamburger from './Hamburger.js';
 
-
+const foursquare = require('react-foursquare') ({
+  clientID: 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT',
+  clientSecret: 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX'
+});
 
 class App extends Component {
   constructor (props) {
     super (props)
     this.state = {
-      locations: require ('./data/locations.json'),
+      locations: [
+      {name: "Bakalarka", location: {lat: 52.8427341, lng: 19.1858564}, id: '4de0b7758877aab7fe5169fc'},
+      {name: "Hotel Korona", location: {lat: 52.8466773, lng: 19.1801208}, id: '4d07cd07f379a093c900e83c'},
+      {name: "Złota Rybka", location: {lat: 52.8505924, lng: 19.2010255}, id: '4f9d2d23e4b0de626872f379'},
+      {name: "Bulwar Poli Negri", location: {lat: 52.8526713, lng: 19.1754019}, id: '4fc014a2e4b021b6df552eb7'},
+      {name: "Supermarket", location: {lat:52.8530244, lng:19.1776207}, id: '51d0015f498ec004ccc6c83e'}
+    ],
+
       query: '',
       markers: [],
       location: {},
       infowindow: false,
       checkedMarker:{},
       data:[],
-      listOpen: true,
-      street:'',
-      city:'',
-      country:''
-
+      listOpen: true
     }
   }
 
@@ -65,29 +71,22 @@ class App extends Component {
 
 
   getFoursquareInfo = () => {
-    const {locations} = this.state
+    const {locations, data} = this.state
     // Foursquare API Client
 
-      const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
-      const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
+      foursquare.venues.getVenues(locations)
+      .then((res) => {
+        this.setState({data: res.response.venue})
+        console.log(data)
+      })
+      .catch(() => {
+        console.log('error')
+      })
 
-      const $ = require('jquery');
 
-      /*his.state.locations.map((location) => {
-        return fetch (`https://api.foursquare.com/v2/venues/search?ll=${location.position.lat},${location.position.lng}&client_id=${clientID}&client_secret=${clientSecret}&v=20180726`)
-      })*/
-      // get JSON request of foursquare data
-      //let reqURL = baseURL + locations.lat + ',' + locations.lng + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&v=20180726'
-      let reqURL = `https://api.foursquare.com/v2/venues/search?ll=` + locations.position.lat + `,` + this.locations.position.lng `&client_id=` + clientID + `&client_secret=` + clientSecret + `&v=20180726`;
-       $.getJSON(reqURL).done(function(data) {
-         var results = data.response.venues[0];
-          this.setState({street: results.location.formattedAddress[0]});
-          this.setState((state) => ({city: results.location.formattedAddress[1]}));
-          this.setState((state) => ({country: results.location.formattedAddress[2]}));
-      }).fail(function() {
-        alert('Something went wrong with foursquare');
-        console.log(reqURL)
-       });
+
+
+
   }
 
   render() {
@@ -123,10 +122,10 @@ class App extends Component {
             markers={markers}
             locations = {findLocations}
             infowindow = {infowindow}
-            foursquare = {this.getFoursquareInfo}
+            data = {data}
             checkedMarker={checkedMarker}
             location={location}
-            data={data}
+            foursquare={this.getFoursquareInfo}
             onMarkerClick={this.onMarkerClick}
             markersArray={this.markersArray}
 
