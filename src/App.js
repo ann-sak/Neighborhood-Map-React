@@ -75,8 +75,8 @@ class App extends Component {
     // Foursquare API Client
 
       foursquare.venues.getVenues(locations)
-      .then((res) => {
-        this.setState({data: res.response.venue})
+      .then(res => {
+        this.setState({data: res.response.venues})
         console.log(data)
       })
       .catch(() => {
