@@ -5,8 +5,8 @@ function LocationsList (props) {
 
 
   return (
-    <div>
-      <ul>
+    <div >
+      <ul className="locationsList">
         {props.findLocations.map((location) => (
           <li
             key = {location.id}

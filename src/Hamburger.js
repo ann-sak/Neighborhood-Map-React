@@ -7,9 +7,9 @@ function Hamburger (props) {
     <div  className="hamburger"
       onClick={props.toggleList}>
       <svg>
-        <rect x={10} y={15} className="hamburger-element" width={40} height={4}/>
-        <rect x={10} y={27} className="hamburger-element" width={40} height={4}/>
-        <rect x={10} y={39} className="hamburger-element" width={40} height={4}/>
+        <rect x={10} y={15} className="hamburger" width={40} height={4}/>
+        <rect x={10} y={27} className="hamburger" width={40} height={4}/>
+        <rect x={10} y={39} className="hamburger" width={40} height={4}/>
       </svg>
     </div>
   )

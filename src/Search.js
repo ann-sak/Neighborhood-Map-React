@@ -5,7 +5,7 @@ function Search (props) {
 
 
   return (
-    <div>
+    <div className="search">
       <input
         type="text"
         placeholder="Search for a location"

@@ -1,177 +1,129 @@
-.App {
-  text-align: center;
+.container {
+  min-height: 100vh;
+  position: relative;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
+.navigation {
+  background-color: #77cdff;
+  height: 40px;
+  padding: 15px;
   color: white;
+  border-bottom: 8px solid #000000;
+  display: flex;
 }
 
-.App-title {
-  font-size: 1em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 .heading {
   margin: 0;
   text-align: center;
-  background-color: #fff2af;
-  xpadding: 0.5em;
-  width:100%;
-  font-size:1.5em;
-  color: #ea4335;
-  border-bottom: 2px solid #f6cf65;
-  border-top: 3px solid #f6cf65;
+  width:80vw;
+  font-size:2em;
+  color: #000000;
+  display:flex;
+}
+
+
+
+
+.content {
+  height: 90vh;
+  display: flex;
+  flex-direction: row;
 }
 
 .map {
-  margin: 0;
-  width: 50%;
-  height: 60vh;
-}
-
-.container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.hamburger {
-  width: 100px;
-  padding-top: 10px;
-  background-color: #fff2af;
-  height:100vh;
-  border-right:3px solid #f6cf65;
-}
-
-.text-input {
-  width: 20%;
-  margin-right:0;
-  background-color: #ededed;
-  height: 100vh;
-  font-size:1em;
-  background-color: #fff2af;
-    border-right:3px solid #f6cf65;
-}
-
-.text-input input {
   width: 100%;
-  line-height: 0.8cm;
-  padding: 17px;
-  padding-left: 55px;
-  width: 300px;
-  border: 1px solid #f5f5f5;
-  font-size: 13px;
-  color: gray;
-  background-image: url('http://i47.tinypic.com/r02vbq.png');
-  background-repeat: no-repeat;
-  background-position: left center;
-  outline: 0;
+  position: relative;
+
 }
 
-.text-input ul {
+.header {
+  background-color: #77cdff
+}
+
+
+.locationsList {
   list-style-type: none;
-  margin:0;
-
+  padding: 5px 10px 5px 20px;
 }
 
-.text-input li {
-  text-decoration: none;
-  font-size: 1.5em;
-  color: white;
-  line-height: 1cm;
-  color: black;
-}
 
-.link {
-  cursor: pointer;
-}
 
 .search {
-  height:10px;
-  align:center;
-  position:absolute;
-  right:10em;
-  top:8em;
-  display: flex;
-  flex-wrap: wrap;
+  width: 100%;
+  padding: 20px 20px 20px 45px;
+  background-image: url('./img/search_icon.svg');
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 1.2em;
+  font-size: 1.5em;
+  border: 0;
+  outline: none;
 }
 
-.menu {
-  display: none;
+.infoButton {
+  background-color: white;
+  color: black;
+  border: 3px solid #000000;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  display: inline-block;
+  width: 200px;
 }
 
-.error {
-  color: red;
+.infoButton:hover {
+    background-color:  #97B5BF;
+    color: white;
 }
 
-.details-button {
-  margin-top:3em;
-  margin-left:40%;
-  width:100px;
+
+.google-api-error {
+  text-align: center;
+  color: white;
+  font-family: 'Noto Sans', sans-serif;
 }
 
-@media screen and (max-width: 800px) {
-  .text-input-hidden {
-    display: none;
-  }
-
-  .text-input {
-    position: absolute;
-    width: 4.5cm;
-    z-index: 2;
-  }
-
-  .text-input input {
-    width: 2.55cm;
-  }
-
-  .menu {
-    display: block;
-    position: absolute;
-    top: 13px !important;
-  }
-
-  .hamburger-icon {
-    width: 45px;
-    fill: #E0E0E0;
-  }
-
-  .map {
-    width: 100%;
-  }
+.google-api-error>h1 {
+  font-size: 2em;
 }
 
-@media screen and (max-width: 500px) {
+.google-api-error>p {
+  padding-top: 0.5em;
+  font-size: 1.5em;
+}
+
+@media (max-width: 500px) {
+  .search{
+    background-image: none;
+    padding-left:20px;
+    font-size: 0.8em;
+  }
+
+  .locationsList {
+    font-size:0.8em;
+  }
+
   .heading {
-    font-size: large;
-    padding-left: 3em;
+    font-size:1.5em;
   }
 
-  .menu {
-    top: 0!important;
+  .hamburger {
+    width: 60px;
   }
 
-}
+  .hamburger svg {
+    width:50px;
+  }
 
-li:focus {
-  background-color: #9f8ef9;
+  .infoButton {
+    padding: 5px 5px;
+    font-size: 1em;
+    width: 100px;
+  }
 }

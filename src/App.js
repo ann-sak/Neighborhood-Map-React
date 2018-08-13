@@ -144,26 +144,31 @@ class App extends Component {
 
     return (
       <div className="container">
-          <h1 className="heading">Neighborhood Map </h1>
+        <div className="navigation">
           <Hamburger
-            className="hamburger"
             toggleList={this.toggleList}
           />
-          {openMenu}
-          <MapContainer
-            className="map"
-            markers={markers}
-            locations = {findLocations}
-            infowindow = {infowindow}
-            country={country}
-            data={data}
-            checkedMarker={checkedMarker}
-            location={location}
-            foursquare={this.getFoursquareInfo}
-            onMarkerClick={this.onMarkerClick}
-            markersArray={this.markersArray}
 
-         />
+          <h1 className="heading">Neighborhood Map </h1>
+        </div>
+        <div className="content">
+          {openMenu}
+          <div className="map">
+            <MapContainer
+              markers={markers}
+              locations = {findLocations}
+              infowindow = {infowindow}
+              country={country}
+              data={data}
+              checkedMarker={checkedMarker}
+              location={location}
+              foursquare={this.getFoursquareInfo}
+              onMarkerClick={this.onMarkerClick}
+              markersArray={this.markersArray}
+
+           />
+           </div>
+          </div>
       </div>
     );
   }

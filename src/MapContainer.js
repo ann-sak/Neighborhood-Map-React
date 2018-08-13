@@ -19,7 +19,7 @@ class MapContainer extends React.Component {
 
 
     return(
-      <div className="map">
+      <div>
         <Map
 
             google={this.props.google}
@@ -52,7 +52,15 @@ class MapContainer extends React.Component {
                   visible={infowindow}
                   country={country}
                   >
-                  <div>
+                  <div
+                      style={{
+                        width: '250px',
+                        height: '300px',
+                        margin: 'auto',
+                        textAlign: 'center',
+                        display:'block',
+                        fontFamily: 'Noto Sans'
+                      }}>
                   <h1>{location.name}</h1>
                   {
                  //additional verification to pass the elements fetched from wikipedia

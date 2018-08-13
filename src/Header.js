@@ -10,7 +10,7 @@ class Header extends Component {
 
 render() {
   return (
-    <div className="text-input">
+    <div className="header">
       <Search
         query={this.props.query}
         updateQuery={this.props.updateQuery}
