@@ -10,7 +10,7 @@ class MapContainer extends React.Component {
 
 
   render() {
-    const {locations, onMarkerClick, infowindow, checkedMarker, location,street} = this.props
+    const {locations, onMarkerClick, infowindow, checkedMarker, location,country, data} = this.props
 
 
       // Add the marker object to the corresponding entry in location array
@@ -21,12 +21,12 @@ class MapContainer extends React.Component {
     return(
       <div className="map">
         <Map
-            
+
             google={this.props.google}
             zoom={ 14 }
             initialCenter = {{
-              lat: 52.845863,
-              lng: 19.181319
+              lat:51.9427566,
+              lng:15.515043
             }}>
 
               {
@@ -50,13 +50,41 @@ class MapContainer extends React.Component {
                 <InfoWindow
                   marker={checkedMarker}
                   visible={infowindow}
-                  street={street}
+                  country={country}
                   >
+                  <div>
                   <h1>{location.name}</h1>
-                  <button
+                  {
+                 //additional verification to pass the elements fetched from wikipedia
+                 data.filter(info => info.id === location.id )
+                 .map(info =>{
+                   let wikiInfo = info.text;
+                   return (
+                   <span  key={location.id}>
+                     {/*here we pass a snippet text fetched from wikipedia*/}
+                     <p
+                       dangerouslySetInnerHTML={ {__html: wikiInfo} }
+                       style={{
+                         fontSize: '1.1em',
+                         padding: '0 5px 7px 0'
+                       }}
+                       tabIndex='0'
+                       />
+                     {/*here we create a button (link) to redirect them to the relevant wikipedia page*/}
+                     <a
+                       href={info.url}
+                       target="_blank"
+                       className="infoButton"
+                       aria-label={`click to learn more about ${location.name}`}
+                       tabIndex='0'
+                     >
+                       {info.readMore}</a>
+                   </span>
+                   )}
+                 )
+              }
+                  </div>
 
-                  >
-                  Details</button>
                 </InfoWindow>
               }
         </Map>

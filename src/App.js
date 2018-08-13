@@ -15,25 +15,26 @@ class App extends Component {
     super (props)
     this.state = {
       locations: [
-      {name: "Bakalarka", location: {lat: 52.8427341, lng: 19.1858564}, id: '4de0b7758877aab7fe5169fc'},
-      {name: "Hotel Korona", location: {lat: 52.8466773, lng: 19.1801208}, id: '4d07cd07f379a093c900e83c'},
-      {name: "Złota Rybka", location: {lat: 52.8505924, lng: 19.2010255}, id: '4f9d2d23e4b0de626872f379'},
-      {name: "Bulwar Poli Negri", location: {lat: 52.8526713, lng: 19.1754019}, id: '4fc014a2e4b021b6df552eb7'},
-      {name: "Supermarket", location: {lat:52.8530244, lng:19.1776207}, id: '51d0015f498ec004ccc6c83e'}
+      {name: "Zielona Góra", location: {lat: 51.9424634, lng: 15.5207873}, id: '4de0b7758877aab7fe5169fc'},
+      {name: "University of Zielona Góra", location: {lat: 51.933138, lng: 15.5023958}, id: '4d07cd07f379a093c900e83c'},
+      {name: "CRS Hall Zielona Góra", location: {lat:51.956455, lng: 15.5224673}, id: '4f9d2d23e4b0de626872f379'},
+      {name: "Luksusowa (vodka)", location: {lat:51.9376308, lng:15.4962061}, id: '4fc014a2e4b021b6df552eb7'},
+      {name: "Zielona Góra Wine Fest", location: {lat:51.9369747, lng:15.5099471}, id: '51d0015f498ec004ccc6c83e'}
     ],
 
       query: '',
       markers: [],
       location: {},
+      data:[],
       infowindow: false,
       checkedMarker:{},
-      country:{},
+      country:[],
       listOpen: true
     }
   }
 
   componentDidMount() {
-
+    this.getDataWiki()
    }
 
   updateQuery = (query) => {
@@ -52,9 +53,7 @@ class App extends Component {
       checkedMarker: marker,
       infowindow: true
     })
-    this.state.locations.map((location) => {
-      this.getFoursquareInfo(location.id)
-    })
+
   }
 
 
@@ -73,28 +72,44 @@ class App extends Component {
   }
 
 
-    getFoursquareInfo(id) {
-      const country = this.state.country
-      const {locations, infowindow} = this.state
-      const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
-      const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
-      const url = `https://api.foursquare.com/v2/venues/${id}?client_id=${clientID}&client_secret=${clientSecret}&v=20180803`
-
-      fetch(url)
-        .then(function (response) {
-          return response.json();
-        })
-        .then((info) => {
-
-          this.setState(
-            country: ({country: info.response.venue.location.country})
-          )
-            console.log(country)
-
-        })
+  getDataWiki = () => {
+      let newData = [];
+      let failedData = [];
+      this.state.locations.map((location) => {
+        //retriving the object from the JSON database using the title attribute
+        return fetch(`https://en.wikipedia.org/w/api.php?&action=query&list=search&prop=extracts&titles&format=json&origin=*&srlimit=1&srsearch=${location.name}`, {
+            headers: {
+              'Origin': 'http://localhost:3000/',
+              'Content-Type': 'application/json; charset=utf-8'
+            }
+          })
+        //converting to json format
+        .then(response => response.json())
+        .then(data => {
+          let url = encodeURI(`https://en.wikipedia.org/wiki/${data.query.search['0'].title}`);
+          //creating an element according to the previously fetched data
+          let element = {
+            text: data.query.search['0'].snippet,
+            id: location.id,
+            name: location.name,
+            url: url,
+            readMore: 'Read more'
+          };
+          newData.push(element);
+          this.setState({data: newData});
+    		})
+        //Error handling function
         .catch(() => {
-          console.log("<p>Oops, there was an issue retrieving info from Foursquare!</p>")
+          console.log('An error occured')
+          let element = {
+            id: location.id,
+            text: "Sorry, it wasn't possible to get any data from Wikipedia, please, try later",
+            readMore: "☹"
+          }
+          failedData.push(element);
+          this.setState({data: failedData});
         })
+      })
     }
 
 
@@ -105,7 +120,7 @@ class App extends Component {
 
 
   render() {
-    const {locations, infowindow, checkedMarker, location, street, markers} = this.state
+    const {locations, infowindow, checkedMarker, location, country, markers,data} = this.state
 
     let findLocations
     if (this.state.query) {
@@ -140,7 +155,8 @@ class App extends Component {
             markers={markers}
             locations = {findLocations}
             infowindow = {infowindow}
-            street={street}
+            country={country}
+            data={data}
             checkedMarker={checkedMarker}
             location={location}
             foursquare={this.getFoursquareInfo}
