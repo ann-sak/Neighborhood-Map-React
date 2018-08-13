@@ -5,16 +5,23 @@ import './App.css';
 
 
 
+
 class MapContainer extends React.Component {
+
+
   render() {
-    const {locations, onMarkerClick, infowindow, checkedMarker, location,data} = this.props
+    const {locations, onMarkerClick, infowindow, checkedMarker, location,street} = this.props
+
+
+      // Add the marker object to the corresponding entry in location array
 
 
 
 
     return(
-      <div>
+      <div className="map">
         <Map
+            
             google={this.props.google}
             zoom={ 14 }
             initialCenter = {{
@@ -38,12 +45,18 @@ class MapContainer extends React.Component {
                     } />
                 ))
               }
+
               {
                 <InfoWindow
                   marker={checkedMarker}
-                  visible={infowindow}>
+                  visible={infowindow}
+                  street={street}
+                  >
                   <h1>{location.name}</h1>
-                  <p></p>
+                  <button
+
+                  >
+                  Details</button>
                 </InfoWindow>
               }
         </Map>

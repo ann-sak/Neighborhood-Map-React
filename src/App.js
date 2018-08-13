@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import './App.css';
 import escapeRegExp from 'escape-string-regexp';
 
@@ -7,10 +6,9 @@ import MapContainer from './MapContainer.js'
 import Header from './Header.js'
 import Hamburger from './Hamburger.js';
 
-const foursquare = require('react-foursquare') ({
-  clientID: 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT',
-  clientSecret: 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX'
-});
+
+
+
 
 class App extends Component {
   constructor (props) {
@@ -29,14 +27,14 @@ class App extends Component {
       location: {},
       infowindow: false,
       checkedMarker:{},
-      data:[],
+      country:{},
       listOpen: true
     }
   }
 
   componentDidMount() {
-    this.getFoursquareInfo();
-  }
+
+   }
 
   updateQuery = (query) => {
     this.setState({query: query.trim() })
@@ -48,12 +46,17 @@ class App extends Component {
     }
   }
 
-  onMarkerClick = (props, marker, e) =>
-  this.setState({
-    location: props,
-    checkedMarker: marker,
-    infowindow: true
-  })
+  onMarkerClick = (props, marker, e) => {
+    this.setState({
+      location: props,
+      checkedMarker: marker,
+      infowindow: true
+    })
+    this.state.locations.map((location) => {
+      this.getFoursquareInfo(location.id)
+    })
+  }
+
 
   selectLocations = (location) => {
     for (const newMarker of this.state.markers) {
@@ -70,27 +73,39 @@ class App extends Component {
   }
 
 
-  getFoursquareInfo = () => {
-    const {locations, data} = this.state
-    // Foursquare API Client
+    getFoursquareInfo(id) {
+      const country = this.state.country
+      const {locations, infowindow} = this.state
+      const clientID = 'TNIDIKHEBFPJR3WMZMUPRLSN4ZO1HM3TTT5AFY4IUVQAM3BT';
+      const clientSecret = 'GJXIBH2A2UQJHFJKHWFHRAKSTVMBYNYN44OUQ0VISHFZSJUX';
+      const url = `https://api.foursquare.com/v2/venues/${id}?client_id=${clientID}&client_secret=${clientSecret}&v=20180803`
 
-      foursquare.venues.getVenues(locations)
-      .then(res => {
-        this.setState({data: res.response.venues})
-        console.log(data)
-      })
-      .catch(() => {
-        console.log('error')
-      })
+      fetch(url)
+        .then(function (response) {
+          return response.json();
+        })
+        .then((info) => {
+
+          this.setState(
+            country: ({country: info.response.venue.location.country})
+          )
+            console.log(country)
+
+        })
+        .catch(() => {
+          console.log("<p>Oops, there was an issue retrieving info from Foursquare!</p>")
+        })
+    }
 
 
 
 
 
-  }
+
+
 
   render() {
-    const {locations, infowindow, checkedMarker, location, data, markers} = this.state
+    const {locations, infowindow, checkedMarker, location, street, markers} = this.state
 
     let findLocations
     if (this.state.query) {
@@ -107,22 +122,25 @@ class App extends Component {
         selectLocations={this.selectLocations}
         updateQuery={this.updateQuery}
         findLocations={findLocations}
+        className
       />
     }
 
 
     return (
-      <div>
-          <h1>Neighboorhood Map </h1>
+      <div className="container">
+          <h1 className="heading">Neighborhood Map </h1>
           <Hamburger
+            className="hamburger"
             toggleList={this.toggleList}
           />
           {openMenu}
           <MapContainer
+            className="map"
             markers={markers}
             locations = {findLocations}
             infowindow = {infowindow}
-            data = {data}
+            street={street}
             checkedMarker={checkedMarker}
             location={location}
             foursquare={this.getFoursquareInfo}
