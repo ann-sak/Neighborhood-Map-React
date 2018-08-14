@@ -7,6 +7,16 @@ import MapContainer from './MapContainer.js'
 import Sidebar from './Sidebar.js'
 import Hamburger from './Hamburger.js';
 
+
+//loading an information about fail with loading the Google Api 
+window.gm_authFailure = () => {
+  const mapSection = document.querySelector('.container');
+  mapSection.innerHTML =
+  `<div class='error'>
+      <p>There is a proble with loading Google Maps</p>
+    </div>`;
+}
+
 class App extends Component {
   constructor (props) {
     super (props)

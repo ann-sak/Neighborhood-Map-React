@@ -1,13 +1,14 @@
-##Neighborhood Map
+## Neighborhood Map
 
 This is the App built for the Google Developer Nanodegree Scholarship with `create-react-app`, Google Api and Wikipedia API
 
-##Installation
+## Installation
 - Clone the repo
 - npm install
 - npm start
+- open http://localhost:3000
 
-##Libraries
+## Libraries
 - `escape-string-regexp`
 - `google-maps-react`
 
