@@ -6,12 +6,16 @@
 .navigation {
   background-color: #77cdff;
   height: 40px;
-  padding: 15px;
+  padding: 10px;
   color: white;
   border-bottom: 8px solid #000000;
   display: flex;
 }
 
+.hamburger svg {
+  xheight:50px;
+  width:50vw;
+}
 
 .heading {
   margin: 0;
@@ -22,7 +26,13 @@
   display:flex;
 }
 
-
+.infowindow {
+    width: 250px;
+    height: 300px;
+    margin: auto;
+    text-align: center;
+    display: block;
+}
 
 
 .content {
@@ -61,14 +71,13 @@
   outline: none;
 }
 
-.infoButton {
-  background-color: white;
+.readmoreButton {
+  background-color:#77cdff;
   color: black;
-  border: 3px solid #000000;
-  padding: 10px 10px;
+  padding: 10px 5px;
   text-align: center;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 2em;
   margin: 4px 2px;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
@@ -77,10 +86,32 @@
   width: 200px;
 }
 
-.infoButton:hover {
-    background-color:  #97B5BF;
+.readmoreButton:hover {
+    background-color:  black;
     color: white;
 }
+
+.listButton {
+    color: black;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1em;;
+    background-color: #77cdff;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+}
+
+
+.listButton:hover {
+    background-color:  black;
+    color: white;
+}
+
 
 
 .google-api-error {
@@ -98,7 +129,7 @@
   font-size: 1.5em;
 }
 
-@media (max-width: 500px) {
+@media screen and (max-width: 500px) {
   .search{
     background-image: none;
     padding-left:20px;
@@ -111,6 +142,7 @@
 
   .heading {
     font-size:1.5em;
+    padding-left:2em;
   }
 
   .hamburger {
@@ -121,9 +153,34 @@
     width:50px;
   }
 
+  .infowindow {
+    width: 150px;
+    height: 300px;
+  }
   .infoButton {
     padding: 5px 5px;
     font-size: 1em;
     width: 100px;
+  }
+  .readmoreButton {
+    font-size: 1em;
+    padding: 0.5em;
+    width:100px;
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 622px) {
+  .heading {
+    font-size:1.5em;
+  }
+  .hamburger svg {
+    width: 30vw;
+  }
+}
+
+@media screen and (min-width: 623px) {
+
+  .hamburger svg {
+    width: 40vw;
   }
 }

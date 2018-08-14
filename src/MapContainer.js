@@ -2,21 +2,9 @@ import React from 'react'
 import { GoogleApiWrapper, InfoWindow, Marker, Map} from 'google-maps-react'
 import './App.css';
 
-
-
-
-
 class MapContainer extends React.Component {
-
-
   render() {
-    const {locations, onMarkerClick, infowindow, checkedMarker, location,country, data} = this.props
-
-
-      // Add the marker object to the corresponding entry in location array
-
-
-
+    const {google, locations, onMarkerClick, infowindow, checkedMarker, location, data} = this.props
 
     return(
       <div>
@@ -27,22 +15,31 @@ class MapContainer extends React.Component {
             initialCenter = {{
               lat:51.9427566,
               lng:15.515043
-            }}>
+            }}
+            animation = {
+              google.maps.Animation.DROP
+            }
+            >
 
               {
-                locations.map(( location, i) => (
+                locations.map(( checkedLocation, i) => (
                   <Marker
                     ref={this.props.markersArray}
                     onClick = {(props, marker) =>
                       onMarkerClick(props,marker)
                     }
-                    key={location.name}
-                    id={location.id}
-                    name={location.name}
+                    key={checkedLocation.name}
+                    id={checkedLocation.id}
+                    name={checkedLocation.name}
                     position={
-                      {lat: location.location.lat,
-                      lng: location.location.lng}
-                    } />
+                      {lat: checkedLocation.location.lat,
+                      lng: checkedLocation.location.lng}
+                    }
+                    animation = {
+                      (location.name === checkedLocation.name)
+                      && google.maps.Animation.BOUNCE
+                    }
+                     />
                 ))
               }
 
@@ -50,17 +47,9 @@ class MapContainer extends React.Component {
                 <InfoWindow
                   marker={checkedMarker}
                   visible={infowindow}
-                  country={country}
                   >
-                  <div
-                      style={{
-                        width: '250px',
-                        height: '300px',
-                        margin: 'auto',
-                        textAlign: 'center',
-                        display:'block',
-                        fontFamily: 'Noto Sans'
-                      }}>
+                  <div className="infowindow"
+                      >
                   <h1>{location.name}</h1>
                   {
                  //additional verification to pass the elements fetched from wikipedia
@@ -69,8 +58,7 @@ class MapContainer extends React.Component {
                    let wikiInfo = info.text;
                    return (
                    <span  key={location.id}>
-                     {/*here we pass a snippet text fetched from wikipedia*/}
-                     <p
+                   <p
                        dangerouslySetInnerHTML={ {__html: wikiInfo} }
                        style={{
                          fontSize: '1.1em',
@@ -78,11 +66,11 @@ class MapContainer extends React.Component {
                        }}
                        tabIndex='0'
                        />
-                     {/*here we create a button (link) to redirect them to the relevant wikipedia page*/}
                      <a
+                      className="readmoreButton"
                        href={info.url}
                        target="_blank"
-                       className="infoButton"
+
                        aria-label={`click to learn more about ${location.name}`}
                        tabIndex='0'
                      >

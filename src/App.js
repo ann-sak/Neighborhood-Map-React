@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.getDataWiki()
+    this.wiki()
    }
 
   updateQuery = (query) => {
@@ -72,7 +72,7 @@ class App extends Component {
   }
 
 
-  getDataWiki = () => {
+  wiki = () => {
       let newData = [];
       let failedData = [];
       this.state.locations.map((location) => {
@@ -137,7 +137,6 @@ class App extends Component {
         selectLocations={this.selectLocations}
         updateQuery={this.updateQuery}
         findLocations={findLocations}
-        className
       />
     }
 

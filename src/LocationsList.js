@@ -9,10 +9,13 @@ function LocationsList (props) {
       <ul className="locationsList">
         {props.findLocations.map((location) => (
           <li
-            key = {location.id}
-            onClick = {() => props.selectLocations(location)}
-          >
-          {location.name}
+            key = {location.id}  >
+              <button
+                className="listButton"
+                onClick = {() => props.selectLocations(location)}>
+
+              {location.name}
+              </button>
           </li>
 
         ))}
