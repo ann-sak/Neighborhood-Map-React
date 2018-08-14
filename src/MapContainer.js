@@ -1,5 +1,6 @@
 import React from 'react'
 import { GoogleApiWrapper, InfoWindow, Marker, Map} from 'google-maps-react'
+
 import './App.css';
 
 class MapContainer extends React.Component {
@@ -7,84 +8,79 @@ class MapContainer extends React.Component {
     const {google, locations, onMarkerClick, infowindow, checkedMarker, location, data} = this.props
 
     return(
-      <div>
-        <Map
+      <div tabIndex='0'>
+        <Map//<---Default map
+          google={this.props.google}
+          zoom={ 14 }
+          initialCenter = {{
+            lat:51.9427566,
+            lng:15.515043
+          }}
+        >
+        {
+          //looping through all locations to show markers
+          locations.map(( checkedLocation, i) => (
+              <Marker
+                  onClick = {(props, marker) =>
+                    onMarkerClick(props,marker)
+                  }
+                  key={checkedLocation.name}
+                  id={checkedLocation.id}
+                  name={checkedLocation.name}
+                  tabIndex='0'
+                  ref={this.props.markersArray}
+                  position={
+                    {lat: checkedLocation.location.lat,
+                    lng: checkedLocation.location.lng}
+                  }
+                  animation = {
+                    (location.name === checkedLocation.name)
+                    && google.maps.Animation.BOUNCE //<---animating the selected marker
+                  }
+               />
+          ))
+        }
 
-            google={this.props.google}
-            zoom={ 14 }
-            initialCenter = {{
-              lat:51.9427566,
-              lng:15.515043
-            }}
-            animation = {
-              google.maps.Animation.DROP
-            }
-            >
-
+        {
+          //populating infowindow
+          <InfoWindow
+            marker={checkedMarker}
+            visible={infowindow}
+            aria-label={`Info about ${location.name}`}
+          >
+            <div className="infowindow">
+              <h1 tabIndex='0'>{location.name}</h1>
               {
-                locations.map(( checkedLocation, i) => (
-                  <Marker
-                    ref={this.props.markersArray}
-                    onClick = {(props, marker) =>
-                      onMarkerClick(props,marker)
-                    }
-                    key={checkedLocation.name}
-                    id={checkedLocation.id}
-                    name={checkedLocation.name}
-                    position={
-                      {lat: checkedLocation.location.lat,
-                      lng: checkedLocation.location.lng}
-                    }
-                    animation = {
-                      (location.name === checkedLocation.name)
-                      && google.maps.Animation.BOUNCE
-                    }
-                     />
-                ))
-              }
-
-              {
-                <InfoWindow
-                  marker={checkedMarker}
-                  visible={infowindow}
-                  >
-                  <div className="infowindow"
-                      >
-                  <h1>{location.name}</h1>
-                  {
-                 //additional verification to pass the elements fetched from wikipedia
-                 data.filter(info => info.id === location.id )
-                 .map(info =>{
-                   let wikiInfo = info.text;
-                   return (
+                //filtering the data from Wikipedia
+               data.filter(info => info.id === location.id ).map(info => {
+                 let wikiInfo = info.text;
+                 return (
                    <span  key={location.id}>
-                   <p
+                     <p
                        dangerouslySetInnerHTML={ {__html: wikiInfo} }
-                       style={{
-                         fontSize: '1.1em',
-                         padding: '0 5px 7px 0'
-                       }}
+                       className = "wikiInfo"
                        tabIndex='0'
-                       />
-                     <a
+                     />
+                     <a //link to article at Wikipedia
                       className="readmoreButton"
-                       href={info.url}
-                       target="_blank"
-
-                       aria-label={`click to learn more about ${location.name}`}
-                       tabIndex='0'
-                     >
-                       {info.readMore}</a>
-                   </span>
-                   )}
-                 )
+                      href={info.url}
+                      target="_blank"
+                      aria-label={`Click to read more about ${location.name}`}
+                      tabIndex='0'
+                      role="button"
+                    >
+                     {info.readMore}
+                    </a>
+                  </span>
+                )}
+                )
               }
-                  </div>
+            </div>
 
-                </InfoWindow>
-              }
-        </Map>
-      </div>
+          </InfoWindow>
+        }
+      </Map>
+    </div>
     )
   }
 }
